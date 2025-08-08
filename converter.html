@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTC to Naira Converter</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #0d1117;
+        color: white;
+        margin: 0;
+        padding: 0;
+    }
+    header {
+        background-color: #161b22;
+        padding: 15px;
+        text-align: center;
+        font-size: 14px;
+        color: #9ca3af;
+    }
+    .container {
+        max-width: 450px;
+        margin: 20px auto;
+        padding: 20px;
+    }
+    .market-signal {
+        background: linear-gradient(145deg, #111827, #1f2937);
+        padding: 15px;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+    .market-signal span {
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .bullish { color: #10b981; }
+    .bearish { color: #ef4444; }
+
+    .converter {
+        background: linear-gradient(145deg, #111827, #1f2937);
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+    .converter label {
+        font-size: 14px;
+        margin-bottom: 5px;
+        display: block;
+        color: #9ca3af;
+    }
+    .converter input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border: none;
+        border-radius: 8px;
+        background-color: #111827;
+        color: white;
+        font-size: 16px;
+    }
+    .result {
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+    .back-btn {
+        display: block;
+        text-align: center;
+        background-color: #2563eb;
+        color: white;
+        padding: 12px;
+        border-radius: 8px;
+        text-decoration: none;
+        margin-top: 20px;
+        font-weight: bold;
+    }
+    .back-btn:hover {
+        background-color: #1d4ed8;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    💡 Rates refresh every 60 seconds. Market prices may vary slightly.
+</header>
+
+<div class="container">
+    <div class="market-signal">
+        <span>Market Signal</span>
+        <span id="signal-status" class="bullish">Bullish ⬆ +2.45%</span>
+    </div>
+
+    <div class="converter">
+        <label>BTC Amount</label>
+        <input type="number" id="btc-amount" placeholder="Enter BTC" step="0.0001">
+
+        <label>Equivalent in NGN</label>
+        <input type="text" id="ngn-amount" placeholder="0.00" readonly>
+
+        <div class="result" id="live-rate">Live Rate: Loading...</div>
+
+        <a href="index.html" class="back-btn">⬅ Back to Dashboard</a>
+    </div>
+</div>
+
+<script>
+    let btcRate = 0;
+
+    // Fetch live BTC to NGN rate
+    async function fetchRate() {
+        const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=ngn&include_24hr_change=true");
+        const data = await res.json();
+        btcRate = data.bitcoin.ngn;
+        const change = data.bitcoin.ngn_24h_change.toFixed(2);
+
+        document.getElementById("live-rate").innerText = `Live Rate: ₦${btcRate.toLocaleString()}`;
+        const signalStatus = document.getElementById("signal-status");
+        if (change >= 0) {
+            signalStatus.textContent = `Bullish ⬆ ${change}%`;
+            signalStatus.className = "bullish";
+        } else {
+            signalStatus.textContent = `Bearish ⬇ ${change}%`;
+            signalStatus.className = "bearish";
+        }
+    }
+
+    // Convert BTC to NGN
+    document.getElementById("btc-amount").addEventListener("input", function() {
+        const btcValue = parseFloat(this.value) || 0;
+        document.getElementById("ngn-amount").value = "₦" + (btcValue * btcRate).toLocaleString();
+    });
+
+    // Refresh rate every 60 seconds
+    fetchRate();
+    setInterval(fetchRate, 60000);
+</script>
+
+</body>
+</html>

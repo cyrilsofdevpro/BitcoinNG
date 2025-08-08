@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trading Interface</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #0d1117;
+        color: white;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 500px;
+        margin: 40px auto;
+        background: #161b22;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 1.8rem;
+        color: #facc15;
+        margin-bottom: 8px;
+    }
+
+    p {
+        text-align: center;
+        font-size: 0.9rem;
+        color: #94a3b8;
+        margin-bottom: 20px;
+    }
+
+    .tabs {
+        display: flex;
+        background: #1f2937;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+
+    .tab {
+        flex: 1;
+        text-align: center;
+        padding: 10px;
+        cursor: pointer;
+        background: #1f2937;
+        transition: 0.3s;
+    }
+
+    .tab.active {
+        background: #2563eb;
+        font-weight: bold;
+    }
+
+    .tab:hover {
+        background: #374151;
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    label {
+        display: block;
+        margin-top: 10px;
+        font-size: 14px;
+        color: #cbd5e1;
+    }
+
+    select, input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: none;
+        border-radius: 6px;
+        background: #0f172a;
+        color: white;
+        font-size: 14px;
+    }
+
+    button {
+        margin-top: 15px;
+        width: 100%;
+        padding: 12px;
+        background: #2563eb;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: #1d4ed8;
+    }
+
+    .home-btn {
+        background: #facc15;
+        color: #000;
+        margin-top: 25px;
+    }
+
+    .home-btn:hover {
+        background: #eab308;
+    }
+
+    .note {
+        font-size: 0.85rem;
+        color: #9ca3af;
+        margin-bottom: 12px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🚀 Bitcoin Trading Hub</h1>
+    <p>Buy, sell, and swap Bitcoin instantly — anytime, anywhere.</p>
+
+    <div class="tabs">
+        <div class="tab active" onclick="showTab(0)">Buy BTC</div>
+        <div class="tab" onclick="showTab(1)">Sell BTC</div>
+        <div class="tab" onclick="showTab(2)">Swap BTC</div>
+    </div>
+
+    <div class="tab-content active">
+        <div class="note">Securely purchase Bitcoin using your preferred payment method.</div>
+        <label>Amount (BTC)</label>
+        <input type="number" placeholder="Enter BTC amount">
+        
+        <label>Payment Method</label>
+        <select>
+            <option>Bank Transfer</option>
+            <option>Credit/Debit Card</option>
+            <option>PayPal</option>
+        </select>
+        
+        <button>Buy Now</button>
+    </div>
+
+    <div class="tab-content">
+        <div class="note">Easily sell Bitcoin and withdraw funds to your account.</div>
+        <label>Amount (BTC)</label>
+        <input type="number" placeholder="Enter BTC amount">
+        
+        <label>Withdrawal Method</label>
+        <select>
+            <option>Bank Transfer</option>
+            <option>PayPal</option>
+            <option>Crypto Wallet</option>
+        </select>
+        
+        <button>Sell Now</button>
+    </div>
+
+    <div class="tab-content">
+        <div class="note">Swap between BTC and other popular cryptocurrencies instantly.</div>
+        <label>From</label>
+        <select>
+            <option>BTC</option>
+            <option>ETH</option>
+            <option>USDT</option>
+        </select>
+
+        <label>To</label>
+        <select>
+            <option>ETH</option>
+            <option>BTC</option>
+            <option>USDT</option>
+        </select>
+
+        <label>Amount</label>
+        <input type="number" placeholder="Enter amount">
+        
+        <button>Swap Now</button>
+    </div>
+
+    <button class="home-btn" onclick="goHome()">🏠 Go to Home</button>
+</div>
+
+<script>
+    function showTab(index) {
+        const tabs = document.querySelectorAll('.tab');
+        const contents = document.querySelectorAll('.tab-content');
+        
+        tabs.forEach(tab => tab.classList.remove('active'));
+        contents.forEach(content => content.classList.remove('active'));
+        
+        tabs[index].classList.add('active');
+        contents[index].classList.add('active');
+    }
+
+    function goHome() {
+        window.location.href = "index.html"; // link back to dashboard
+    }
+</script>
+
+</body>
+</html>

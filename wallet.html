@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet - BitcoinNG</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background: #111;
+            color: #fff;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        header .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        header img {
+            width: 35px;
+            height: 35px;
+        }
+        h2 {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 28px;
+        }
+        p.subtitle {
+            text-align: center;
+            color: gray;
+            margin-top: -5px;
+            font-size: 16px;
+        }
+        .wallet-container {
+            background: #fff;
+            margin: 25px auto;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .wallet-container h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #222;
+        }
+        .wallet-container p {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .wallet-option {
+            background: #f5f5f5;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .wallet-option:hover {
+            background: #e1e1e1;
+            transform: translateY(-2px);
+        }
+        .wallet-option img {
+            width: 35px;
+            height: 35px;
+            margin-right: 15px;
+        }
+        .wallet-option span {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .qr-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .qr-container img {
+            width: 150px;
+            height: 150px;
+            border: 2px solid #ddd;
+            padding: 5px;
+            border-radius: 10px;
+        }
+        .wallet-address {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            background: #f1f1f1;
+            padding: 8px;
+            border-radius: 6px;
+            word-break: break-all;
+        }
+        .home-btn {
+            display: block;
+            width: fit-content;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background: #111;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: 0.3s;
+        }
+        .home-btn:hover {
+            background: #444;
+        }
+        .transactions {
+            margin-top: 30px;
+        }
+        .transaction-item {
+            background: #f9f9f9;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .transaction-item span {
+            display: block;
+            font-size: 14px;
+        }
+        .transaction-item .amount {
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968260.png" alt="logo">
+            <h1>BitcoinNG</h1>
+        </div>
+        <div class="settings">⚙️</div>
+    </header>
+
+    <!-- WALLET PAGE -->
+    <h2>Wallet</h2>
+    <p class="subtitle">Connect and manage your Bitcoin wallet</p>
+
+    <div class="wallet-container">
+        <h3>Wallet Integration</h3>
+        <p>Connect your wallet to view your Bitcoin balance and make transactions.</p>
+
+        <div class="wallet-option" onclick="connectMetaMask()">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask">
+            <span>Connect to MetaMask</span>
+        </div>
+
+        <div class="wallet-option">
+            <img src="https://trustwallet.com/assets/images/media/assets/trust-platform.svg" alt="Trust Wallet">
+            <span>Connect to Trust Wallet</span>
+        </div>
+
+        <div class="qr-container">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=bc1qexampleaddress123456789" alt="QR Code">
+            <div class="wallet-address">bc1qexampleaddress123456789abcdefg</div>
+        </div>
+    </div>
+
+    <!-- LIVE TRANSACTIONS -->
+    <div class="wallet-container transactions">
+        <h3>Live Bitcoin Transactions</h3>
+        <div id="transactions-list">Loading...</div>
+    </div>
+
+    <!-- Back to home -->
+    <a href="index.html" class="home-btn">⬅ Back to Home</a>
+
+    <script>
+        function connectMetaMask() {
+            alert("MetaMask connection coming soon...");
+        }
+
+        async function loadTransactions() {
+            try {
+                let res = await fetch("https://blockchain.info/unconfirmed-transactions?format=json");
+                let data = await res.json();
+                let txList = document.getElementById("transactions-list");
+                txList.innerHTML = "";
+                data.txs.slice(0, 5).forEach(tx => {
+                    let amount = tx.out.reduce((sum, o) => sum + o.value, 0) / 100000000;
+                    let hash = tx.hash.substring(0, 20) + "...";
+                    txList.innerHTML += `
+                        <div class="transaction-item">
+                            <span>Hash: ${hash}</span>
+                            <span class="amount">Amount: ${amount.toFixed(4)} BTC</span>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                document.getElementById("transactions-list").innerHTML = "Error loading transactions.";
+            }
+        }
+        loadTransactions();
+    </script>
+
+</body>
+</html>
